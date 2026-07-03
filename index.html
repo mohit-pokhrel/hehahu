@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Expression Scan</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="app">
+
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-dot" id="brandDot"></span>
+        <span class="brand-name">EXPRESSION SCAN</span>
+      </div>
+      <div class="status-pill" id="statusPill">
+        <span class="status-dot"></span>
+        <span id="statusText">Initializing</span>
+      </div>
+    </header>
+
+    <main class="stage">
+
+      <!-- Camera viewfinder -->
+      <section class="viewfinder" id="viewfinder">
+        <video id="video" autoplay playsinline muted></video>
+        <canvas id="overlay"></canvas>
+
+        <!-- Corner brackets, viewfinder styling -->
+        <div class="bracket bracket-tl"></div>
+        <div class="bracket bracket-tr"></div>
+        <div class="bracket bracket-bl"></div>
+        <div class="bracket bracket-br"></div>
+
+        <!-- Recording progress ring around button lives in controls, but a thin top bar shows scan progress -->
+        <div class="scan-progress" id="scanProgress"><div class="scan-progress-fill" id="scanProgressFill"></div></div>
+
+        <!-- Overlay states -->
+        <div class="overlay-state" id="permissionState">
+          <div class="overlay-icon">◎</div>
+          <p class="overlay-title">Camera access needed</p>
+          <p class="overlay-sub">Allow camera permission to begin scanning your expression.</p>
+          <button class="btn-ghost" id="retryPermissionBtn">Grant Access</button>
+        </div>
+
+        <div class="overlay-state hidden" id="deniedState">
+          <div class="overlay-icon overlay-icon-warn">⊘</div>
+          <p class="overlay-title">Camera access denied</p>
+          <p class="overlay-sub">Enable camera permissions for this site in your browser settings, then reload the page.</p>
+          <button class="btn-ghost" id="reloadBtn">Reload Page</button>
+        </div>
+
+        <div class="overlay-state hidden" id="loadingState">
+          <div class="spinner"></div>
+          <p class="overlay-title" id="loadingTitle">Loading models</p>
+          <p class="overlay-sub" id="loadingSub">Setting up the recognition engine…</p>
+        </div>
+
+        <div class="overlay-state hidden" id="noFaceBadge-container">
+          <!-- placeholder, no-face indicator is rendered as small badge instead -->
+        </div>
+
+        <div class="live-badge hidden" id="noFaceBadge">No face detected</div>
+        <div class="live-badge live-badge-rec hidden" id="recBadge"><span class="rec-dot"></span> REC <span id="recTimer">5.0s</span></div>
+      </section>
+
+      <!-- Controls -->
+      <section class="controls">
+        <button class="scan-btn" id="scanBtn" disabled>
+          <span class="scan-btn-ring" id="scanBtnRing"></span>
+          <span class="scan-btn-label" id="scanBtnLabel">Start Scan</span>
+        </button>
+        <p class="controls-hint" id="controlsHint">Waiting for camera…</p>
+      </section>
+
+      <!-- Result board -->
+      <section class="result-board" id="resultBoard">
+        <div class="result-board-header">
+          <span class="result-eyebrow">Result</span>
+          <span class="result-meta" id="resultMeta">—</span>
+        </div>
+
+        <div class="result-empty" id="resultEmpty">
+          <p>Run a 5-second scan to see your detected expression here.</p>
+        </div>
+
+        <div class="result-content hidden" id="resultContent">
+          <div class="result-main">
+            <span class="result-emoji" id="resultEmoji">🙂</span>
+            <div class="result-text">
+              <span class="result-emotion" id="resultEmotion">Neutral</span>
+              <span class="result-confidence" id="resultConfidence">0% confidence</span>
+            </div>
+          </div>
+
+          <div class="result-breakdown" id="resultBreakdown">
+            <!-- populated by JS: bars per emotion -->
+          </div>
+
+          <div class="result-upload" id="resultUpload">
+            <span id="uploadStatusText">Backing up recording…</span>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="footnote">
+      Runs fully in your browser. Video is uploaded to your backend only as a backup after analysis.
+    </footer>
+
+  </div>
+
+  <!-- face-api.js for on-device facial expression recognition -->
+  <script src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
