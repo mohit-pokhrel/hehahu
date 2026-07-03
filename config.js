@@ -6,5 +6,5 @@
 // Render URL + /api/upload, e.g.:
 //   https://your-app-name.onrender.com/api/upload
 window.EXPRESSION_APP_CONFIG = {
-  backendUrl: "https://face-detection-backend-4ny1.onrender.com/api/upload",
+  backendUrl: "https://backend-ewxw.onrender.com/api/upload",
 };
